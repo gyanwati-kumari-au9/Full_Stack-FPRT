@@ -42,6 +42,20 @@ const asyncMiddleware = fn =>
       .catch(next);
 };
 
+// Middleware
+const whitelist = ['http://localhost:3000'​, 'http://localhost:5000'​, 'https://shrouded-journey-38552.heroku...​']
+const corsOptions = {
+  origin: function (origin, callback) {
+    console.log("** Origin of request " + origin)
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      console.log("Origin acceptable")
+      callback(null, true)
+    } else {
+      console.log("Origin rejected")
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
 
 // Routers
 const userRouter = require("./Routes/userRoutes");
@@ -55,6 +69,12 @@ app.use("/todos", todosRouter);
 app.use("/groups", groupRouter);
 
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname,"client/build")));
+  app.get("*",function (req, res) {
+    res.sendFile(path.join(__dirname, "client/build","index.html"));
+  });
+} 
 
 app.listen(port,(err) => {
     if(err) throw err;
