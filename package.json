@@ -17,7 +17,8 @@
   "scripts": {
     "heroku-postbuild": "cd client && npm install --only=dev --no-shrinkwrap && npm run build",
     "start":"node api.js",
-    "dev":"nodemon api.js"
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run client\" \"nodemon app.js\""
 
   },
   "author": "Gyaan",
