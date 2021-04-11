@@ -46,11 +46,13 @@ const asyncMiddleware = fn =>
 // Routers
 const userRouter = require("./Routes/userRoutes");
 const todosRouter = require("./Routes/todosRoutes");
+const groupRouter = require("./Routes/groupRoutes");
+
 
 // Set up routes
 app.use("/users", userRouter);
 app.use("/todos", todosRouter);
-
+app.use("/groups", groupRouter);
 
 
 

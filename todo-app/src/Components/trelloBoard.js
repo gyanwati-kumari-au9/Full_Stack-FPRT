@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { Link } from "react-router-dom";
 import * as USER from "../api/apiActions.js";
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row';
@@ -9,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 import GroupTasks from './GroupTasks';
 
 
-class Login extends Component {
+class TrelloBoard extends Component {
   state = {
     user: {},
     text: "Login to manage your account",
@@ -17,25 +16,29 @@ class Login extends Component {
         "id":"123",
         "task":"Buy Grocery",
         "group": "To DOs",
+        "createdAt": "",
+        "comleteAt": "",
         "completed": false,
-        "favorite": false
+        "favorite": false,
+        "tags": ["Urgent","Gyan"]
     }],
     groups: [
-        "To DOs",
-        "On going",
-        "Done"
+        {id:1, name: "To DOs"},
+        {id:2, name: "On going"},
+        {id:3, name: "Done"}
     ]
   };
 
   formatTodos = (groups, tasks) => {
-    const formattedToDos = {}
+    let formattedToDos = [];
     const added = [];
-    for(let group in groups){
-        const groupTask = tasks.filter(task => {added.push(task.id); return task.group == group });
-        formattedToDos.push({group, tasks: groupTask});
-    }
+    groups.forEach(group => {
+        console.log("Processing groups", group.id, group.name);
+        const groupTask = tasks.filter(task => {added.push(task.id); return task.group === group.name });
+        formattedToDos.push({id: group.id, group: group.name, tasks: groupTask});
+    })
     const uncategorizedTodos = tasks.filter(task => !added.includes(task.id));
-    formattedToDos.push({group: "Uncategorized", tasks: uncategorizedTodos});
+    formattedToDos= [{id: 0, group: "Uncategorized", tasks: uncategorizedTodos}].concat(formattedToDos);
     return formattedToDos;
   }
 
@@ -69,19 +72,20 @@ class Login extends Component {
     });
   };
   render() {
-    if (localStorage.getItem("user")) {
-      return <Redirect to="/dash" />;
+    if (!localStorage.getItem("user")) {
+      return <Redirect to="/login" />;
     }
     const groups = this.formatTodos(this.state.groups, this.state.tasks);
+    console.log(groups);
     return (
-        <Container style={{ marginTop: "3em"}}>
+        <Container fluid>
         <Row > 
             <Col>
-                <center><h1>{"All Your TODOs"}</h1></center>
+              <p>drkytrbm</p>
             </Col>
         </Row>
         <Row>
-            {groups.map(group => <GroupTasks group={group.group} tasks={group.tasks}/>)}
+            {groups.map(group => <Col><GroupTasks key={group.id} group={group.group} tasks={group.tasks}/></Col>)}
         </Row>
     </Container> 
      
@@ -93,4 +97,4 @@ function mapStateToProps(state) {
   return state;
 }
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps)(TrelloBoard);
