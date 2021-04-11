@@ -4,6 +4,7 @@ import * as USER from "../api/apiActions.js";
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import "../styles/signup.css";
 
 export default class Signup extends Component {
   state = {
@@ -13,17 +14,22 @@ export default class Signup extends Component {
   };
 
   register = async () => {
-    const { user, message } = await USER.signup(this.state.user);
-    if (user) {
+    const data = await USER.signup(this.state.user);
+    console.log("Response",data);
+    if (data && data.user) {
       this.setState({
         isRegistered: true,
       });
+      alert(data.message);
     } else {
       this.setState({
         ...this.state,
-        text: message,
+        text: data.message,
+        error: data.error
       });
+      alert(data.error);
     }
+    
   };
 
   onChange = (e) => {
@@ -96,61 +102,7 @@ export default class Signup extends Component {
                     </Col>
                 </Row>
             </Container> 
-      // <div className="login-page">
-      //   <div
-      //     className="row"
-      //     // style={{ backgroundImage: `url(${icon.loginBack})` }}
-      //   >
-      //     <div className="col-6 login-col hide-div"></div>
-      //     <div className="col-6 login-col">
-      //       <form className="login-form">
-      //         <img className="logo" src="images/logo.png"  alt="logo" />
-
-      //         <h1>Create an account</h1>
-
-      //         <div className="form-group">
-      //           <label>{this.state.text}</label>
-      //           <input
-      //             type="text"
-      //             className="form-control"
-      //             placeholder="Name"
-      //             name="username"
-      //             onChange={this.onChange}
-      //           />
-      //           <input
-      //             type="email"
-      //             className="form-control"
-      //             id="email"
-      //             placeholder="Email"
-      //             name="email"
-      //             onChange={this.onChange}
-      //           />
-
-      //           <input
-      //             type="password"
-      //             className="form-control"
-      //             id="pwd"
-      //             placeholder="Password"
-      //             name="password"
-      //             onChange={this.onChange}
-      //           />
-      //         </div>
-
-      //         <div className="login-button">
-      //           <button onClick={this.register} type="button">
-      //             Signup
-      //           </button>
-      //         </div>
-
-      //         <div className="checkbox">
-      //           <label>
-      //             Don't have an account? <Link to="/login">Sign In</Link>
-      //           </label>
-      //         </div>
-      //       </form>
-      //     </div>
-      //   </div>
-      // </div>
+      
     );
   }
 }
