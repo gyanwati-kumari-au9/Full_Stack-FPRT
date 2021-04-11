@@ -19,9 +19,14 @@ export async function signup(user) {
   return data;
 }
 
-export async function getUserTodos(id) {
+export async function getUserTodos(token) {
   let data = await publicFetch
-    .get(`todos/${id}`)
+    .get(`todos`, {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": token,
+      },
+    })
     .then((response) => response.data)
     .catch((err) => err.data);
 
@@ -57,9 +62,15 @@ export async function deleteTodos({ id, token }) {
 }
 
 // 
-export async function addTodos(todo) {
+export async function addTodos(todo, token) {
+  console.log("Ad ODO api called", todo, token)
   let data = await publicFetch
-    .post("todos", todo)
+    .post("todos", todo, {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": token,
+      },
+    })
     .then((response) => response.data)
     .catch((err) => err.data);
 
@@ -68,7 +79,40 @@ export async function addTodos(todo) {
 
 export async function updateTodoStatus(id, todo, token) {
   let data = await publicFetch
-    .put(`todos/${id}`, todo)
+    .put(`todos/${id}`, todo, {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": token,
+      },
+    })
+    .then((response) => response.data)
+    .catch((err) => err.data);
+
+  return data;
+}
+
+export async function toggleFavorite(id, todo, token) {
+  let data = await publicFetch
+    .put(`todos/favorite/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": token,
+      },
+    })
+    .then((response) => response.data)
+    .catch((err) => err.data);
+
+  return data;
+}
+
+export async function toggleComplete(id, todo, token) {
+  let data = await publicFetch
+    .put(`todos/complete/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": token,
+      },
+    })
     .then((response) => response.data)
     .catch((err) => err.data);
 

@@ -6,10 +6,25 @@ const Groups = require("../Models/groupModel");
 // Verify Token
 const verify = require("../verifyToken");
 
+formatTodos = (groups, tasks) => {
+  let formattedToDos = [];
+  const added = [];
+  groups.forEach(group => {
+      console.log("Processing groups", group._id, group.name, tasks);
+      const groupTask = tasks.filter(task => {added.push(task._id); return task.group === group._id.toString() });
+      formattedToDos.push({id: group._id, group: group.name, tasks: groupTask});
+  })
+  // const uncategorizedTodos = tasks.filter(task => !added.includes(task._id));
+  // formattedToDos= [{id: 0, group: "Uncategorized", tasks: uncategorizedTodos}].concat(formattedToDos);
+  return formattedToDos;
+}
+
 // Get All Todo
 router.get("/", verify, async (req, res) => {
+  const groups = await Groups.find({user: req.user.user._id});
   const todos = await Todos.find({user: req.user.user._id});
-  res.send({ todos });
+  
+  res.send({ todos: formatTodos(groups, todos) });
 });
 
 // Get Todo by ID

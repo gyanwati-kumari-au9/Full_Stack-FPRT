@@ -4,7 +4,7 @@ import * as USER from "../api/apiActions.js";
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import "../styles/signup.css";
+// import "../styles/signup.css";
 
 export default class Signup extends Component {
   state = {
@@ -63,7 +63,8 @@ export default class Signup extends Component {
                             type="text"
                             className="form-control"
                             placeholder="Name"
-                            name="username"
+                            id="name"
+                            name="name"
                             onChange={this.onChange}
                           />
                           <input

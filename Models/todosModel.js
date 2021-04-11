@@ -7,7 +7,7 @@ const todosSchema = new Schema({
   completed: {type: Boolean, default: false},
   favorite: {type: Boolean, default: false},
   createdAt: {type: Date, default: Date.now()},
-  cGroup: String
+  group: String
 });
 
 module.exports = mongoose.model("todos", todosSchema);

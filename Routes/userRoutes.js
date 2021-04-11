@@ -9,7 +9,7 @@ const verify = require("../verifyToken");
 
 // Login
 router.post("/login", loginValidation, async (req, res) => {
-    res.json({ user: req.user, token: req.token });
+    res.json({ user: req.user, token: req.token, message: "Login Successfull" });
 });
 
 // Signup
